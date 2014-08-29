@@ -133,11 +133,13 @@ bool LinkedList::removeElement(string someISBN)
 void LinkedList::printList()
  {
     struct Book *bookPtr = head;
+    cout << "\n\n";
     while(bookPtr != NULL) {
       cout << "Book Title: " << bookPtr->title << "\n";
-      cout << "Book ISBN: "  << bookPtr->isbn  << "\n\n";
+      cout << "Book ISBN: "  << bookPtr->isbn  << "\n\n\n";
       bookPtr = bookPtr->next;
     }
+    cout << "\n";
     bookPtr = NULL;
  }
 
