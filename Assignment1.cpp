@@ -1,6 +1,6 @@
 // Assignment #1
-// Name:
-// ASU Email Address:
+// Name: Jacob Pruitt
+// ASU Email Address: jrpruit1@asu.edu
 // Description: This program displays a menu of choices to a user
 //        and performs the chosen task. It will keep asking a user to
 //        enter the next choice until the choice of 'Q' (Quit) is entered.
