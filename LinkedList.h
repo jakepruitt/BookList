@@ -47,12 +47,16 @@ LinkedList::LinkedList()
 LinkedList::~LinkedList()
  {
     struct Book *bookPtr = head;
+    int count = 0;
     while( bookPtr != NULL) {
       Book *nextBookPtr = bookPtr->next;
-      free(bookPtr);
+      delete bookPtr;
       bookPtr = nextBookPtr;
+      count++;
     }
     bookPtr = NULL;
+
+    cout << "The number of deleted books is: " << count << "\n";
  }
 
 //Description: addElement function creates a new Book from the
@@ -65,21 +69,16 @@ bool LinkedList::addElement(string newTitle, string newISBN)
     // First part: finding if the Book already exists
     struct Book *bookPtr = head;
     while( bookPtr != NULL) {
-      if (bookPtr->title.compare(newTitle) == 0 && bookPtr->isbn.compare(newISBN) == 0)
-      {
+      if (bookPtr->title.compare(newTitle) == 0 && bookPtr->isbn.compare(newISBN) == 0) {
         return false;
+      } else {
+        bookPtr = bookPtr->next;
       }
-      bookPtr = bookPtr->next;
     }
+    bookPtr = NULL;
 
     // Second part: create new Book
-    struct Book *newBook;
-    newBook = (struct Book *) malloc(sizeof(struct Book));
-
-    // Check that there is not heap overflow
-    if (newBook == NULL) {
-      printf("out of memory\n");  return false;
-    }
+    struct Book *newBook = new Book();
 
     // Third part: inserting new Book
     newBook->title = newTitle;
@@ -88,13 +87,37 @@ bool LinkedList::addElement(string newTitle, string newISBN)
     newBook->next = head;
     head = newBook;
 
+    newBook = NULL;
+
     return true;
  }
 
-//Description: .... to be completed
+//Description: removeElement function removes a Book element from
+//      the LinkedList based on the someISBN parameter.  The function
+//      returns true if the Book was successfully removed, false otherwise.
 bool LinkedList::removeElement(string someISBN)
  {
-    return true;
+    struct Book *bookPtr = head, *prevPtr = bookPtr;
+    while( bookPtr != NULL) {
+      if (bookPtr->isbn.compare(someISBN) == 0) {
+        if (bookPtr == head) {
+          head = bookPtr->next;
+          delete bookPtr;
+        } else {
+          prevPtr->next = bookPtr->next;
+          delete bookPtr;
+        }
+
+        return true;
+      } else {
+        prevPtr = bookPtr;
+        bookPtr = bookPtr->next;
+      }
+    }
+    bookPtr = NULL;
+    prevPtr = NULL;
+
+    return false;
  } 
 
 //Description: printList function outputs the contents of
@@ -106,6 +129,8 @@ void LinkedList::printList()
     while(bookPtr != NULL) {
       cout << "Book Title: " << bookPtr->title << "\n";
       cout << "Book ISBN: "  << bookPtr->isbn  << "\n\n";
+      bookPtr = bookPtr->next;
     }
+    bookPtr = NULL;
  }
 
