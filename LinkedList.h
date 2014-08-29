@@ -67,15 +67,15 @@ LinkedList::~LinkedList()
 bool LinkedList::addElement(string newTitle, string newISBN)
  {
     // First part: finding if the Book already exists
-    struct Book *bookPtr = head;
-    while( bookPtr != NULL) {
-      if (bookPtr->title.compare(newTitle) == 0 && bookPtr->isbn.compare(newISBN) == 0) {
+    struct Book *bookPtr = head, *prevPtr = bookPtr;
+    while( bookPtr != NULL && bookPtr->title.compare(newTitle) <= 0) {
+      if (bookPtr->title.compare(newTitle) == 0) {
         return false;
       } else {
+        prevPtr = bookPtr;
         bookPtr = bookPtr->next;
       }
     }
-    bookPtr = NULL;
 
     // Second part: create new Book
     struct Book *newBook = new Book();
@@ -84,9 +84,16 @@ bool LinkedList::addElement(string newTitle, string newISBN)
     newBook->title = newTitle;
     newBook->isbn  = newISBN;
 
-    newBook->next = head;
-    head = newBook;
+    if (bookPtr == head) {
+      newBook->next = head;
+      head = newBook;
+    } else {
+      newBook->next = bookPtr;
+      prevPtr->next = newBook;
+    }
 
+    bookPtr = NULL;
+    prevPtr = NULL;
     newBook = NULL;
 
     return true;
